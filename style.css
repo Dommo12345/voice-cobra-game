@@ -78,7 +78,71 @@ function update() {
                 bird.y < pipe.top ||
                 bird.y + bird.height > pipe.bottom
             )
-        ) {
+        ) 
+// Draw Game
+function draw() {
+
+    // Background
+    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+
+    // Pipes
+    ctx.fillStyle = "green";
+
+    pipes.forEach(pipe => {
+
+        // Top Pipe
+        ctx.fillRect(pipe.x, 0, pipe.width, pipe.top);
+
+        // Bottom Pipe
+        ctx.fillRect(
+            pipe.x,
+            pipe.bottom,
+            pipe.width,
+            canvas.height - pipe.bottom
+        );
+
+    });
+
+    // Player Head
+    ctx.drawImage(
+        head,
+        bird.x,
+        bird.y,
+        bird.width,
+        bird.height
+    );
+
+    // Score
+    ctx.fillStyle = "white";
+    ctx.font = "30px Arial";
+    ctx.fillText("Score : " + score, 20, 40);
+
+    // Game Over
+    if (gameOver) {
+        ctx.fillStyle = "red";
+        ctx.font = "40px Arial";
+        ctx.fillText("GAME OVER", 70, 300);
+
+        ctx.font = "22px Arial";
+        ctx.fillText("Refresh to Play Again", 80, 340);
+    }
+
+}
+
+// Game Loop
+function gameLoop() {
+
+    update();
+
+    draw();
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+gameLoop();
+
+            
             gameOver = true;
         }
 
