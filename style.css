@@ -19,3 +19,69 @@ canvas{
     width:400px;
     height:600px;
 }
+
+// Create Pipes
+function createPipe() {
+
+    const gap = 170;
+    const topHeight = Math.random() * 250 + 50;
+
+    pipes.push({
+        x: canvas.width,
+        width: 70,
+        top: topHeight,
+        bottom: topHeight + gap,
+        passed: false
+    });
+
+}
+
+setInterval(() => {
+    if (!gameOver) createPipe();
+}, 2000);
+
+// Update Game
+function update() {
+
+    if (gameOver) return;
+
+    // Gravity
+    bird.velocity += bird.gravity;
+    bird.y += bird.velocity;
+
+    // Ground Collision
+    if (bird.y + bird.height >= canvas.height) {
+        gameOver = true;
+    }
+
+    // Ceiling
+    if (bird.y < 0) {
+        bird.y = 0;
+    }
+
+    // Pipes
+    pipes.forEach(pipe => {
+
+        pipe.x -= 3;
+
+        // Score
+        if (!pipe.passed && pipe.x + pipe.width < bird.x) {
+            score++;
+            pipe.passed = true;
+        }
+
+        // Collision
+        if (
+            bird.x < pipe.x + pipe.width &&
+            bird.x + bird.width > pipe.x &&
+            (
+                bird.y < pipe.top ||
+                bird.y + bird.height > pipe.bottom
+            )
+        ) {
+            gameOver = true;
+        }
+
+    });
+
+}
